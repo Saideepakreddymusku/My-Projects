@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Report</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main id="main_container">
+        <section id="card_container">
+            <form id="firstSection">
+                <input type="text" id="location" placeholder="Enter Your Location">
+                <input type="submit" value="Get Weather">
+            </form>
+            <article id="secondSection">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Weather-rain-thunderstorm.svg/640px-Weather-rain-thunderstorm.svg.png" alt="Weather Icon">
+                <p>Weather Description</p>
+            </article>
+            <article id="thirdSection">
+              <section id="temperature">
+                <h1>0<sup>o</sup>C</h1>
+                <p>Temperature</p>
+              </section>
+              <section id="humidity">
+                  <h1>0%</              <p>Humidity</p>
+              </section>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('firstSection').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const location = document.getElementById('location').value;
+            
+            if (location) {
+                console.log(`Fetching weather data for: ${location}`);
+                fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=e40d8bfc07f177183111a3101fc564c4&units=metric`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        document.querySelector('#secondSection p').innerText = data.weather[0].description;
+                        document.querySelector('#temperature h1').innerText = `${data.main.temp}°C`;
+                        document.querySelector('#humidity h1').innerText = `${data.main.humidity}%`;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Could not fetch weather data. Please check the location entered.');
+                    });
+            } else {
+                alert('Please enter a location');
+            }
+        });
+    </script>
+</body>
+</html>
